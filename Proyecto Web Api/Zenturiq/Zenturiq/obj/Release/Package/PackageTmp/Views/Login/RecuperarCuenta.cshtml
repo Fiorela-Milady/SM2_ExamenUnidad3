@@ -1,0 +1,24 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    <div class="container mt-5">
+        <h2>Recuperar Cuenta</h2>
+        @if (ViewBag.Message != null)
+        {
+            <div class="alert alert-success">@ViewBag.Message</div>
+        }
+        else if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger">@ViewBag.Error</div>
+        }
+        <div class="form-group">
+            <label for="correoElectronico">Correo Electrónico</label>
+            <input type="email" name="correoElectronico" class="form-control" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Enviar Código</button>
+        <a href="@Url.Action("Index", "Login")" class="btn btn-secondary">Cancelar</a>
+    </div>
+}

@@ -1,0 +1,62 @@
+﻿@model List<Zenturiq.Models.NotasCursoViewModel>
+
+@{
+    ViewBag.Title = "Notas del Estudiante";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Notas del Estudiante</h2>
+
+<!-- Barra de navegación -->
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link @(ViewBag.ActiveTab == "Perfil" ? "active" : "")" href="@Url.Action("Detalles", "Estudiante", new { id = ViewBag.IDEstudiante })">Perfil</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(ViewBag.ActiveTab == "Notas" ? "active" : "")" href="@Url.Action("Notas", "Estudiante", new { id = ViewBag.IDEstudiante })">Notas</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(ViewBag.ActiveTab == "Extracurricular" ? "active" : "")" href="@Url.Action("Extracurricular", "Estudiante", new { id = ViewBag.IDEstudiante })">Extracurricular</a>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle @(ViewBag.ActiveTab == "RealizarTest" || ViewBag.ActiveTab == "VerResultados" ? "active" : "")" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Test Vocacional
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="@Url.Action("RealizarTest", "Estudiante", new { id = ViewBag.IDEstudiante })">Realizar Test</a></li>
+            <li><a class="dropdown-item" href="@Url.Action("ResultadosTest", "Estudiante", new { id = ViewBag.IDEstudiante })">Ver Resultados</a></li>
+        </ul>
+    </li>
+</ul>
+
+<h3>@ViewBag.Estudiante.Nombres @ViewBag.Estudiante.ApellidoPaterno @ViewBag.Estudiante.ApellidoMaterno</h3>
+
+@foreach (var curso in Model)
+{
+    <h4>Curso: @curso.CursoNombre - Nota Final: @curso.NotaFinalCurso</h4>
+    <table class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th style="width: 25%;">Criterio</th>
+                <th style="width: 15%;">Bimestre 1</th>
+                <th style="width: 15%;">Bimestre 2</th>
+                <th style="width: 15%;">Bimestre 3</th>
+                <th style="width: 15%;">Bimestre 4</th>
+                <th style="width: 15%;">Nota Final Criterio</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var criterio in curso.NotasPorCriterio)
+            {
+                <tr>
+                    <td>@criterio.CriterioNombre</td>
+                    <td>@criterio.NotaBimestre1</td>
+                    <td>@criterio.NotaBimestre2</td>
+                    <td>@criterio.NotaBimestre3</td>
+                    <td>@criterio.NotaBimestre4</td>
+                    <td>@criterio.NotaFinalCriterio</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

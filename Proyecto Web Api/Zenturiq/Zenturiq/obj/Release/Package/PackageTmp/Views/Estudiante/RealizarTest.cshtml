@@ -1,0 +1,70 @@
+﻿@model Zenturiq.Models.TestViewModel
+
+@{
+    ViewBag.Title = "Realizar Test";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Test Vocacional</h2>
+
+<!-- Barra de navegación -->
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link @(ViewBag.ActiveTab == "Perfil" ? "active" : "")" href="@Url.Action("Detalles", "Estudiante", new { id = Model.IDEstudiante })">Perfil</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(ViewBag.ActiveTab == "Notas" ? "active" : "")" href="@Url.Action("Notas", "Estudiante", new { id = Model.IDEstudiante })">Notas</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(ViewBag.ActiveTab == "Extracurricular" ? "active" : "")" href="@Url.Action("Extracurricular", "Estudiante", new { id = Model.IDEstudiante })">Extracurricular</a>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle @(ViewBag.ActiveTab == "RealizarTest" || ViewBag.ActiveTab == "VerResultados" ? "active" : "")" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Test Vocacional
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="@Url.Action("RealizarTest", "Estudiante", new { id = Model.IDEstudiante })">Realizar Test</a></li>
+            <li><a class="dropdown-item" href="@Url.Action("ResultadosTest", "Estudiante", new { id = Model.IDEstudiante })">Ver Resultados</a></li>
+        </ul>
+    </li>
+</ul>
+
+<h3>@ViewBag.Estudiante.Nombres @ViewBag.Estudiante.ApellidoPaterno @ViewBag.Estudiante.ApellidoMaterno</h3>
+
+@using (Html.BeginForm("RealizarTest", "Estudiante", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.IDEstudiante)
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Nº</th>
+                <th>Pregunta</th>
+                <th>Sí</th>
+                <th>No</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Preguntas.Count; i++)
+            {
+                <tr>
+                    <td>
+                        @Model.Preguntas[i].NumeroPregunta
+                        @Html.HiddenFor(m => m.Preguntas[i].IDPregunta)
+                    </td>
+                    <td>@Model.Preguntas[i].TextoPregunta</td>
+                    <td class="text-center">
+                        @Html.RadioButtonFor(m => m.Preguntas[i].Respuesta, 1)
+                    </td>
+                    <td class="text-center">
+                        @Html.RadioButtonFor(m => m.Preguntas[i].Respuesta, 0)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button type="submit" class="btn btn-primary">Enviar Respuestas</button>
+}
+

@@ -1,0 +1,87 @@
+﻿@model Zenturiq.Models.ExtracurricularViewModel
+
+@{
+    ViewBag.Title = "Actividades Extracurriculares";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Actividades Extracurriculares</h2>
+
+<!-- Barra de navegación -->
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link @(ViewBag.ActiveTab == "Perfil" ? "active" : "")" href="@Url.Action("Detalles", "Estudiante", new { id = Model.IDEstudiante })">Perfil</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(ViewBag.ActiveTab == "Notas" ? "active" : "")" href="@Url.Action("Notas", "Estudiante", new { id = Model.IDEstudiante })">Notas</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(ViewBag.ActiveTab == "Extracurricular" ? "active" : "")" href="@Url.Action("Extracurricular", "Estudiante", new { id = Model.IDEstudiante })">Extracurricular</a>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle @(ViewBag.ActiveTab == "RealizarTest" || ViewBag.ActiveTab == "VerResultados" ? "active" : "")" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Test Vocacional
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="@Url.Action("RealizarTest", "Estudiante", new { id = Model.IDEstudiante })">Realizar Test</a></li>
+            <li><a class="dropdown-item" href="@Url.Action("ResultadosTest", "Estudiante", new { id = Model.IDEstudiante })">Ver Resultados</a></li>
+        </ul>
+    </li>
+</ul>
+
+<h3>@ViewBag.Estudiante.Nombres @ViewBag.Estudiante.ApellidoPaterno @ViewBag.Estudiante.ApellidoMaterno</h3>
+
+<!-- Botón Agregar -->
+<button class="btn btn-primary" id="btnAgregar">Agregar Actividad</button>
+
+<!-- Sección para mostrar las actividades -->
+@foreach (var actividad in Model.Actividades)
+{
+    <div class="col-md-3">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">@actividad.Nombre</h5>
+                <p class="card-text">
+                    @foreach (var criterio in actividad.Criterios)
+                    {
+                        <span class="badge bg-secondary">@criterio</span>
+                    }
+                </p>
+                <form action="@Url.Action("EliminarExtracurricular", "Estudiante")" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="idEstudiante" value="@Model.IDEstudiante" />
+                    <input type="hidden" name="nombreActividad" value="@actividad.Nombre" />
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+
+
+<!-- Modal para agregar actividad -->
+<div class="modal fade" id="modalAgregar" tabindex="-1" aria-labelledby="modalAgregarLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id="modalContent">
+                <!-- El contenido del modal se cargará aquí -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#btnAgregar').click(function () {
+                var url = '@Url.Action("AgregarExtracurricular", "Estudiante", new { id = Model.IDEstudiante })';
+                $.get(url, function (data) {
+                    $('#modalContent').html(data);
+                    var myModal = new bootstrap.Modal(document.getElementById('modalAgregar'));
+                    myModal.show();
+                });
+            });
+        });
+    </script>
+}

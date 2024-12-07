@@ -1,0 +1,113 @@
+﻿@model Zenturiq.Models.ResultadosTestViewModel
+
+@{
+    ViewBag.Title = "Resultados del Test Vocacional";
+}
+
+<h2>Resultados del Test Vocacional</h2>
+
+<!-- Barra de navegación -->
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link @(ViewBag.ActiveTab == "Perfil" ? "active" : "")" href="@Url.Action("Detalles", "Estudiante", new { id = ViewBag.IDEstudiante })">Perfil</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(ViewBag.ActiveTab == "Notas" ? "active" : "")" href="@Url.Action("Notas", "Estudiante", new { id = ViewBag.IDEstudiante })">Notas</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(ViewBag.ActiveTab == "Extracurricular" ? "active" : "")" href="@Url.Action("Extracurricular", "Estudiante", new { id = ViewBag.IDEstudiante })">Extracurricular</a>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle @(ViewBag.ActiveTab == "RealizarTest" || ViewBag.ActiveTab == "VerResultados" ? "active" : "")" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Test Vocacional
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="@Url.Action("RealizarTest", "Estudiante", new { id = ViewBag.IDEstudiante })">Realizar Test</a></li>
+            <li><a class="dropdown-item" href="@Url.Action("ResultadosTest", "Estudiante", new { id = ViewBag.IDEstudiante })">Ver Resultados</a></li>
+        </ul>
+    </li>
+</ul>
+
+<p><strong>Estudiante:</strong> @Model.Estudiante.Nombres @Model.Estudiante.ApellidoPaterno @Model.Estudiante.ApellidoMaterno</p>
+
+@if (ViewBag.Mensaje != null)
+{
+    <p>@ViewBag.Mensaje</p>
+}
+else
+{
+    <h3>Resultados de Interés</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Área</th>
+                <th>Puntuación</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var ordenChaside = new List<string> { "C", "H", "A", "S", "I", "D", "E" };
+                foreach (var codigoArea in ordenChaside)
+                {
+                    if (Model.ResultadosInteres.ContainsKey(codigoArea))
+                    {
+                        var result = new KeyValuePair<string, int>(codigoArea, Model.ResultadosInteres[codigoArea]);
+                        var area = Model.Areas[result.Key];
+                        var isTop = Model.TopAreasInteres.Any(t => t.Key == result.Key);
+                        <tr style="font-weight:@(isTop ? "bold" : "normal")">
+                            <td>@area.NombreArea (@area.CodigoArea)</td>
+                            <td>@result.Value</td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+
+    <h3>Resultados de Aptitud</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Área</th>
+                <th>Puntuación</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                foreach (var codigoArea in ordenChaside)
+                {
+                    if (Model.ResultadosAptitud.ContainsKey(codigoArea))
+                    {
+                        var result = new KeyValuePair<string, int>(codigoArea, Model.ResultadosAptitud[codigoArea]);
+                        var area = Model.Areas[result.Key];
+                        var isTop = Model.TopAreasAptitud.Any(t => t.Key == result.Key);
+                        <tr style="font-weight:@(isTop ? "bold" : "normal")">
+                            <td>@area.NombreArea (@area.CodigoArea)</td>
+                            <td>@result.Value</td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+
+    <h3>Área Destacada de Interés</h3>
+    foreach (var areaResult in Model.TopAreasInteres)
+    {
+        var area = Model.Areas[areaResult.Key];
+        <div>
+            <p><strong>@area.NombreArea (@area.CodigoArea)</strong></p>
+            <p><strong>Atributos de Interés:</strong> @area.AtributosInteres</p>
+        </div>
+    }
+
+    <h3>Área Destacada de Aptitud</h3>
+    foreach (var areaResult in Model.TopAreasAptitud)
+    {
+        var area = Model.Areas[areaResult.Key];
+        <div>
+            <p><strong>@area.NombreArea (@area.CodigoArea)</strong></p>
+            <p><strong>Atributos de Aptitud:</strong> @area.AtributosAptitud</p>
+        </div>
+    }
+}

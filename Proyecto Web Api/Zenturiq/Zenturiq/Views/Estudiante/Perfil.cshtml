@@ -1,0 +1,57 @@
+﻿@model IEnumerable<Zenturiq.Models.EstudianteViewModel>
+
+@{
+    ViewBag.Title = "Perfil de Estudiantes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Perfil de Estudiantes</h2>
+
+<!-- Formulario de Búsqueda -->
+@using (Html.BeginForm("Perfil", "Estudiante", FormMethod.Get))
+{
+    <div class="form-group">
+        @Html.Label("Buscar:")
+        @Html.TextBox("searchString", ViewBag.CurrentFilter as string, new { @class = "form-control", placeholder = "Ingrese término de búsqueda" })
+        <br />
+        <input type="submit" value="Buscar" class="btn btn-primary" />
+    </div>
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Código Estudiante</th>
+            <th>Apellido Paterno</th>
+            <th>Apellido Materno</th>
+            <th>Nombres</th>
+            <th>Sexo</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.CodigoEstudiante</td>
+                    <td>@item.ApellidoPaterno</td>
+                    <td>@item.ApellidoMaterno</td>
+                    <td>@item.Nombres</td>
+                    <td>@item.Sexo</td>
+                    <td>
+                        <!-- Botón "Ver" -->
+                        <a href="@Url.Action("Detalles", "Estudiante", new { id = item.IDEstudiante })" class="btn btn-info">Ver</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6">No se encontraron estudiantes.</td>
+            </tr>
+        }
+    </tbody>
+</table>

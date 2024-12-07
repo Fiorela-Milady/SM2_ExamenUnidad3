@@ -1,0 +1,50 @@
+﻿@model Zenturiq.Models.EstudianteViewModel
+
+@{
+    ViewBag.Title = "Detalles del Estudiante";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Detalles del Estudiante</h2>
+
+<!-- Barra de navegación -->
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link @(ViewBag.ActiveTab == "Perfil" ? "active" : "")" href="@Url.Action("Detalles", "Estudiante", new { id = Model.IDEstudiante })">Perfil</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(ViewBag.ActiveTab == "Notas" ? "active" : "")" href="@Url.Action("Notas", "Estudiante", new { id = Model.IDEstudiante })">Notas</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(ViewBag.ActiveTab == "Extracurricular" ? "active" : "")" href="@Url.Action("Extracurricular", "Estudiante", new { id = Model.IDEstudiante })">Extracurricular</a>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle @(ViewBag.ActiveTab == "RealizarTest" || ViewBag.ActiveTab == "VerResultados" ? "active" : "")" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Test Vocacional
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="@Url.Action("RealizarTest", "Estudiante", new { id = Model.IDEstudiante })">Realizar Test</a></li>
+            <li><a class="dropdown-item" href="@Url.Action("ResultadosTest", "Estudiante", new { id = Model.IDEstudiante })">Ver Resultados</a></li>
+        </ul>
+    </li>
+
+</ul>
+
+
+
+
+
+<!-- Ficha de Estudiante -->
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">@Model.Nombres @Model.ApellidoPaterno @Model.ApellidoMaterno</h3>
+    </div>
+    <div class="panel-body">
+        <p><strong>Código Estudiante:</strong> @Model.CodigoEstudiante</p>
+        <p><strong>Tipo de Documento:</strong> @Model.TipoDocumento</p>
+        <p><strong>Número de Documento:</strong> @Model.NumeroDocumento</p>
+        <p><strong>Validado con Reniec:</strong> @Model.ValidadoConReniec</p>
+        <p><strong>Sexo:</strong> @Model.Sexo</p>
+        <p><strong>Fecha de Nacimiento:</strong> @Model.FechaNacimiento.ToShortDateString()</p>
+    </div>
+</div>

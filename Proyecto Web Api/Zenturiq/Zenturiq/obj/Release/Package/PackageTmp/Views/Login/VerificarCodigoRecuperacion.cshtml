@@ -1,0 +1,27 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+    ViewBag.Title = "Recuperar Cuenta";
+}
+<h2>Recuperar Cuenta</h2>
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+@using (Html.BeginForm())
+{
+    @Html.Hidden("correoElectronico", (string)ViewBag.CorreoElectronico)
+    <div class="form-group">
+        <label>Código de Recuperación</label>
+        <input type="text" name="codigo" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label>Nueva Contraseña</label>
+        <input type="password" name="nuevaContraseña" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label>Confirmar Contraseña</label>
+        <input type="password" name="confirmarContraseña" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Restablecer Contraseña</button>
+    <a href="@Url.Action("Index", "Login")" class="btn btn-secondary">Cancelar</a>
+}

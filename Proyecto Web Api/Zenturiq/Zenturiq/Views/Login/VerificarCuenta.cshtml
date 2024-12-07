@@ -1,0 +1,19 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+    ViewBag.Title = "Verificar Cuenta";
+}
+<h2>Verificar Cuenta</h2>
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+@using (Html.BeginForm())
+{
+    @Html.Hidden("correoElectronico", (string)ViewBag.CorreoElectronico)
+    <div class="form-group">
+        <label>Código de Verificación</label>
+        <input type="text" name="codigo" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Verificar</button>
+    <a href="@Url.Action("Index", "Login")" class="btn btn-secondary">Cancelar</a>
+}
